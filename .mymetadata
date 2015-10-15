@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project-module
   type="WEB"
-  name="arch"
+  name="arch Maven Webapp"
   id="myeclipse.1431481096923"
   context-root="/arch"
   j2ee-spec="6.0"
-  archive="arch.war">
+  archive="arch Maven Webapp.war">
   <attributes>
     <attribute name="webrootdir" value="src/main/webapp" />
   </attributes>
