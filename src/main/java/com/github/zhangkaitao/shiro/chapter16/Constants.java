@@ -11,4 +11,5 @@ package com.github.zhangkaitao.shiro.chapter16;
 public class Constants {
     public static final String CURRENT_USER = "user";
     public static final String NO_THING_STRING = "no_thing_here";
+    public static final String git_commit_1 = "1";
 }
