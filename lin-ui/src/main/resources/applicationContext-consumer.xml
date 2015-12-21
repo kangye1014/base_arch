@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans  
+    http://www.springframework.org/schema/beans/spring-beans.xsd        http://code.alibabatech.com/schema/dubbo        http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+ 
+    <!-- 消费方应用名，用于计算依赖关系，不是匹配条件，不要与提供方一样 -->
+    <dubbo:application name="jiea-iloan"  />
+    
+    <!-- 核心、贷后、结算zookeeper服务  172.16.7.54:4444-->
+    <dubbo:registry id="noticeRegistry" address="zookeeper://172.16.7.56:40000" client="zkclient" timeout="200000"/>
+ 	<!-- 核心服务 -->
+    <!-- 生成远程服务代理，可以和本地bean一样使用demoService -->
+    <dubbo:reference id="emailService" interface="com.puhui.notification.api.EmailService" timeout="200000" registry="noticeRegistry" check="false"/>
+     <!-- 决策引擎 客户端服务接口 -->
+ 	<dubbo:reference id="shortMessageSendService" interface="com.puhui.notification.api.ShortMessageSendService" timeout="200000" registry="noticeRegistry" check="false"/>
+    <!-- 根据身份证号获取借款记录信息 和根据身份证号获取逾期进件信息-->
+    <dubbo:reference id="loanRecordService" interface="com.puhui.core.api.LoanRecordService" timeout="200000" registry="noticeRegistry" check="false"/>
+	<!-- 还款相关查询服务-->
+    <dubbo:reference id="repayQueryService" interface="com.puhui.core.api.RepayQueryService" timeout="200000" registry="noticeRegistry" check="false"/>
+	<!-- 账户查询服务-->
+    <dubbo:reference id="accountQueryService" interface="com.puhui.core.api.AccountQueryService" timeout="200000" registry="noticeRegistry" check="false"/>
+	<!-- 账户服务-->
+    <dubbo:reference id="accountService" interface="com.puhui.core.api.AccountService" timeout="200000" registry="noticeRegistry" check="false"/>
+	<!-- 放款服务-->
+    <dubbo:reference id="makeLoanService" interface="com.puhui.core.api.MakeLoanService" timeout="200000" registry="noticeRegistry" check="false"/>
+	<!-- 还款服务-->
+	<dubbo:reference id="repayService" interface="com.puhui.core.api.RepayService" timeout="200000" registry="noticeRegistry" check="false"/>
+	<!--黑名单-->
+	<dubbo:reference id="blacklistAPIService" interface="com.puhui.blacklist.api.BlacklistAPIService" timeout="100000" registry="noticeRegistry" check="false"/>
+ 	<!-- 结算服务 -->
+	<!--提现付款结算中心接口-->
+    <dubbo:reference id="payOrCollectionReqPaymentOrderService" interface="com.puhui.settlement.api.service.PayOrCollectionReqPaymentOrderService" timeout="100000" registry="noticeRegistry" check="false"/>
+ 	<dubbo:reference id="paymentRemitWSService" interface="com.puhui.settlement.api.service.PaymentRemitWSService" timeout="100000" registry="noticeRegistry" check="false"/>
+	<!-- 贷后dubbo接口 -->
+	<dubbo:reference id="repayCaseService" interface="com.puhui.repay.api.service.RepayCaseService" timeout="100000" registry="noticeRegistry" check="false"/>
+	
+	<!-- 决策引擎-->
+	<dubbo:reference id="decisionEngineService" interface="com.puhui.decisionengine.api.DecitionOpenLineService" timeout="100000" registry="noticeRegistry" check="false"/>
+	
+	<!-- 数据中心zookeeper服务 -->
+	<dubbo:registry id="analyRegistry" address="zookeeper://172.16.4.171:2181?backup=172.16.4.172:2181,172.16.4.173:2181" client="zkclient" timeout="100000"/>
+	<dubbo:reference id="analyserService" interface="com.puhui.rpc.service.dic.AnalyserService" registry="analyRegistry" check="false"/>
+	<dubbo:reference id="analyserJRService" interface="com.puhui.dc.rpc.service.dic.AnalyserJRService" registry="analyRegistry" check="false" timeout="100000"/>
+	<dubbo:reference id="queryBuilderService" interface="com.puhui.dc.rpc.service.mongo.QueryBuilderService" timeout="10000" registry="analyRegistry" check="false"/>
+    <dubbo:reference id="analyserDcService" interface="com.puhui.dc.rpc.service.dic.AnalyserDcService" registry="analyRegistry" timeout="100000" check="false"/>
+	<dubbo:reference id="antifraudService" registry="noticeRegistry" interface="com.puhui.antifraud.api.service.AntifraudAPIService" timeout="100000" check="false"/>
+	<dubbo:reference id="relationService" registry="analyRegistry" interface="com.puhui.dc.rpc.service.dic.AntifraudService" timeout="100000" />
+	<dubbo:reference id="blackListInfoService" interface="com.puhui.blacklist.api.BlackListInfoService" timeout="100000" registry="analyRegistry" check="false"/>
+	
+	
+	<!-- 爱钱进.借啊zookeeper服务 -->
+	<dubbo:registry id="autocarRegistry" address="zookeeper://172.16.5.104:2181" client="zkclient" timeout="100000"/>
+	<!-- 汽车之家MQ配置 -->
+	<dubbo:reference id="sendMQService" interface="com.ishidai.dubbo.api.SendMQService" timeout="100000" registry="autocarRegistry" check="false"/>
+	<dubbo:reference id="smsService" interface="com.ishidai.dubbo.api.SmsService" timeout="100000" registry="autocarRegistry" check="false"/>
+	<dubbo:reference id="loanCenterService" interface="com.ishidai.dubbo.api.car.LoanService" timeout="100000" registry="autocarRegistry" check="false"/>
+	<dubbo:reference id="bankCardService" interface="com.ishidai.dubbo.api.BankCardService" timeout="100000" registry="autocarRegistry" check="false"/>
+	<dubbo:reference id="iQJService" interface="com.ishidai.dubbo.api.IQJService " timeout="100000" registry="autocarRegistry" check="false"/>
+
+	<dubbo:protocol name="dubbo" accepts="20000"/>
+</beans>
