@@ -10,7 +10,7 @@
 	<artifactId>lin-core</artifactId>
 	<description>lin-core</description>
 	<packaging>jar</packaging>
-	<name>core</name>
+	<name>lin-core</name>
 	<url>http://maven.apache.org</url>
 
 	<dependencies>
