@@ -1,43 +1,92 @@
 *.class
 
 # Package Files #
+*.jar
+*.war
+*.ear
+is-core\.settings
+is-dashboard\.settings
+is-monitor\.settings
+qre\.settings
+qre2\.settings
 
-linshow\.settings
-linshow/lin-core/.settings
-linshow/lin-cache/.settings
-linshow/lin-dashbroad/.settings
-linshow/lin-ui/.settings
-linshow/lin-jobs/.settings
+Idubbo\.settings
+Idubbo/Idubbo-api/.settings
+Idubbo/Idubbo-consumer/.settings
+Idubbo/Idubbo-provider/.settings
 
+is-core\.project
+is-dashboard\.project
+is-monitor\.project
+qre\.project
+qre2\.project
 
-linshow\.project
-linshow/lin-core/.project
-linshow/lin-cache/.project
-linshow/lin-dashbroad/.project
-linshow/lin-ui/.project
-linshow/lin-jobs/.project
+Idubbo\.project
+Idubbo/Idubbo-api/.project
+Idubbo/Idubbo-consumer/.project
+Idubbo/Idubbo-provider/.project
 
-linshow\.classpath
-linshow/lin-core/.classpath
-linshow/lin-cache/.classpath
-linshow/lin-dashbroad/.classpath
-linshow/lin-ui/.classpath
-linshow/lin-jobs/.classpath
+is-core\.classpath
+is-dashboard\.classpath
+is-monitor\.classpath
+qre\.classpath
+qre2\.classpath
 
-linshow\target
-linshow/lin-core/target
-linshow/lin-cache/target
-linshow/lin-dashbroad/target
-linshow/lin-ui/target
-linshow/lin-jobs/target
+Idubbo\.classpath
+Idubbo/Idubbo-api/.classpath
+Idubbo/Idubbo-consumer/.classpath
+Idubbo/Idubbo-provider/.classpath
+
+is-core\target
+is-dashboard\target
+is-monitor\target
+qre\target
+qre2\target
+Idubbo\target
+Idubbo/Idubbo-api/target
+Idubbo/Idubbo-consumer/target
+Idubbo/Idubbo-provider/target
+
+is-core/.project
+is-dashboard/.project
+is-monitor/.project
+qre/.project
+qre2/.project
+
+Idubbo/Idubbo-api/doc
+Idubbo/Idubbo-api/doc.zip
+
 
 .project
 .settings
 .classpath
 target
+/node_modules
 
 # logs #
 logs
 
+# idea # 
+.idea
+is-core\.idea
+is-core/.idea
+*.iml
+/bin/*
+
+is-dashboard/is-dashboard.iml
+is-core/is-core.iml
+is-monitor/is-core.iml
+qre/is-core.iml
+qre2/is-core.iml
+
+
+Servers
+.metadata
+
+is-dashboard/.externalToolBuilders/org.eclipse.wst.jsdt.core.javascriptValidator.launch
+is-core/.externalToolBuilders/org.eclipse.wst.jsdt.core.javascriptValidator.launch
+is-monitor/.externalToolBuilders/org.eclipse.wst.jsdt.core.javascriptValidator.launch
+qre/.externalToolBuilders/org.eclipse.wst.jsdt.core.javascriptValidator.launch
+qre2/.externalToolBuilders/org.eclipse.wst.jsdt.core.javascriptValidator.launch
 
 

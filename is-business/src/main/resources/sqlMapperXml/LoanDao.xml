@@ -1,0 +1,356 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ishidai.ischedule.business.dao.LoanDao">
+
+	<resultMap id="BaseResultLoanUserMap" type="com.ishidai.ischedule.business.domain.Loan">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="loan_no" property="loanNo" jdbcType="VARCHAR" />
+		<result column="apply_no" property="applyNo" jdbcType="VARCHAR" />
+		<result column="contract_id" property="contractId" jdbcType="BIGINT" />
+		<result column="issue" property="issue" jdbcType="VARCHAR" />
+		<result column="title" property="title" jdbcType="VARCHAR" />
+		<result column="type" property="type" jdbcType="INTEGER" />
+		<result column="user_id" property="userId" jdbcType="BIGINT" />
+		<result column="shares" property="shares" jdbcType="INTEGER" />
+		<result column="amount" property="amount" jdbcType="DOUBLE" />
+		<result column="real_amount" property="realAmount" jdbcType="DOUBLE" />
+		<result column="open_amount" property="openAmount" jdbcType="DOUBLE" />
+		<result column="raise_amount" property="raiseAmount" jdbcType="DOUBLE" />
+		<result column="raise_limit" property="raiseLimit" jdbcType="INTEGER" />
+		<result column="period" property="period" jdbcType="INTEGER" />
+		<result column="rate" property="rate" jdbcType="DOUBLE" />
+		<result column="repay_type" property="repayType" jdbcType="INTEGER" />
+		<result column="loan_desc" property="loanDesc" jdbcType="VARCHAR" />
+		<result column="loan_pic" property="loanPic" jdbcType="VARCHAR" />
+		<result column="service_fee_rate" property="serviceFeeRate"
+			jdbcType="DOUBLE" />
+		<result column="overdul_insterest_rate" property="overdulInsterestRate"
+			jdbcType="DOUBLE" />
+		<result column="bad_debt_insterest_rate" property="badDebtInsterestRate"
+			jdbcType="DOUBLE" />
+		<result column="prepayment_insterest" property="prepaymentInsterest"
+			jdbcType="DOUBLE" />
+		<result column="status" property="status" jdbcType="INTEGER" />
+		<result column="is_over_due" property="isOverDue" jdbcType="INTEGER" />
+		<result column="is_bad_debt" property="isBadDebt" jdbcType="INTEGER" />
+		<result column="is_risk_audit" property="isRiskAudit" jdbcType="INTEGER" />
+		<result column="risk_audit_time" property="riskAuditTime"
+			jdbcType="TIMESTAMP" />
+		<result column="risk_score" property="riskScore" jdbcType="VARCHAR" />
+		<result column="risk_money" property="riskMoney" jdbcType="DOUBLE" />
+		<result column="is_operate_audit" property="isOperateAudit"
+			jdbcType="INTEGER" />
+		<result column="operate_audit_staff" property="operateAuditStaff"
+			jdbcType="BIGINT" />
+		<result column="operate_audit_time" property="operateAuditTime"
+			jdbcType="TIMESTAMP" />
+		<result column="operate_audit_opinion" property="operateAuditOpinion"
+			jdbcType="VARCHAR" />
+		<result column="confirm_time" property="confirmTime" jdbcType="TIMESTAMP" />
+		<result column="over_due_time" property="overDueTime" jdbcType="TIMESTAMP" />
+		<result column="bad_deb_time" property="badDebTime" jdbcType="TIMESTAMP" />
+		<result column="pass_time" property="passTime" jdbcType="TIMESTAMP" />
+		<result column="full_time" property="fullTime" jdbcType="TIMESTAMP" />
+		<result column="open_time" property="openTime" jdbcType="TIMESTAMP" />
+		<result column="first_repay_time" property="firstRepayTime"
+			jdbcType="TIMESTAMP" />
+		<result column="push_time" property="pushTime" jdbcType="TIMESTAMP" />
+		<result column="fail_time" property="failTime" jdbcType="TIMESTAMP" />
+		<result column="end_time" property="endTime" jdbcType="TIMESTAMP" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+		<result column="operate_staff_id" property="operateStaffId"
+			jdbcType="BIGINT" />
+		<result column="receive_order_id" property="receiveOrderId"
+			jdbcType="BIGINT" />
+		<result column="receive_order_name" property="receiveOrderName"
+			jdbcType="VARCHAR" />
+		<result column="version" property="version" jdbcType="INTEGER" />
+		<result column="real_name" property="realName" jdbcType="VARCHAR" />
+		<result column="mobile" property="mobile" jdbcType="VARCHAR" />
+		<result column="phone" property="usePhone" jdbcType="VARCHAR" />
+		<result column="nickname" property="nickname" jdbcType="VARCHAR" />
+		<result column="region" property="region" jdbcType="VARCHAR" />
+		<result column="id_no" property="idNo" jdbcType="VARCHAR" />
+		<result column="cellphoneos_type" property="cellPhoneOsType"
+			jdbcType="VARCHAR" />
+		<result column="apply_type" property="applyType" jdbcType="INTEGER" />
+		<result column="is_new_credit_data" property="isNewCreditData"
+			jdbcType="INTEGER" />
+		<result column="source" property="source" jdbcType="VARCHAR" />
+	</resultMap>
+
+
+	<!-- 根据不同来源和corerequestid集合找进件 -->
+	<select id="queryLoanByRequestIds" parameterType="Map"
+		resultType="Map">
+		select loan.id,
+		loan.source,loan.core_request_id,loan.user_id,u.mobile, ub.bank_card
+		from p_loan loan
+		left join user u on loan.user_id = u.id
+		left join
+		user_bank_card ub on loan.deduct_bank_card_id = ub.id
+		where 1=1
+		<if test="ids != null">
+			and loan.core_request_id in
+			<foreach item="item" index="index" collection="ids" open="("
+				separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+		<if test="source != null">
+			and loan.source =#{source}
+		</if>
+	</select>
+
+	<!-- 依据参数查询标的列表 -->
+	<select id="getLoanListByParams" resultMap="BaseResultLoanUserMap"
+		parameterType="Map">
+		select
+		pl.id,
+		pl.loan_no,
+		pl.apply_no,
+		pl.contract_id,
+		pl.issue,
+		pl.title,
+		pl.type,
+		pl.user_id,
+		pl.shares,
+		pl.amount,
+		pl.real_amount,
+		pl.open_amount,
+		pl.raise_amount,
+		pl.raise_limit,
+		pl.period,
+		pl.rate,
+		pl.repay_type,
+		pl.loan_desc,
+		pl.loan_pic,
+		pl.service_fee_rate,
+		pl.overdul_insterest_rate,
+		pl.bad_debt_insterest_rate,
+		pl.prepayment_insterest,
+		pl.status,
+		pl.is_over_due,
+		pl.is_bad_debt,
+		pl.is_risk_audit,
+		pl.risk_audit_time,
+		pl.risk_score,
+		pl.risk_money,
+		pl.is_operate_audit,
+		pl.operate_audit_staff,
+		pl.operate_audit_time,
+		pl.operate_audit_opinion,
+		pl.confirm_time,
+		pl.over_due_time,
+		pl.bad_deb_time,
+		pl.pass_time,
+		pl.full_time,
+		pl.open_time,
+		pl.first_repay_time,
+		pl.push_time,
+		pl.fail_time,
+		pl.end_time,
+		pl.create_time,
+		pl.update_time,
+		pl.operate_staff_id,
+		pl.receive_order_name,
+		pl.receive_order_id,
+		pl.is_new_credit_data,
+		pl.version,
+		ui.apply_name as realName,
+		u.mobile,
+		u.phone,
+		u.nickname,
+		ui.id_no,
+		u.region,
+		pl.client_type as cellphoneos_type,
+		pl.source as source
+	<![CDATA[
+    from p_loan pl 
+	    left join user u on pl.user_id = u.id 
+	    left join tm_cus_apply_loan t on pl.apply_no=t.apply_no
+	    left join user_info ui on pl.id=ui.loan_id
+    ]]>
+		where pl.status != 13
+		<if test="loanId != null">
+			and pl.id = #{loanId}
+		</if>
+		<if test="status != null">
+			<choose>
+				<!-- 全部标的 -->
+				<when test=" status == -1">
+					and 1=1
+				</when>
+				<!-- 可导出的标的 -->
+				<when test=" status == -2">
+					and pl.status not in(0,1,2,3,4,12,14,16)
+				</when>
+				<!-- 用户待确认的标的 -->
+				<when test=" status == -3">
+					and pl.status in(5,6,7,8,9,10,11,12,15)
+				</when>
+				<!-- 用户待推送的标的 (用户确认成功、推送失败) -->
+				<when test=" status == -4">
+					and pl.status in(6,15)
+				</when>
+				<!-- 其他 -->
+				<otherwise>
+					and pl.status = #{status}
+				</otherwise>
+			</choose>
+		</if>
+		<if test="isOverDue != null">
+			and pl.is_over_due = #{isOverDue}
+		</if>
+		<if test="userId != null">
+			and pl.user_id = #{userId}
+		</if>
+		<if test="mobile != null">
+			and u.mobile = #{mobile}
+		</if>
+		<if test="nickname != null">
+			and u.nickname = #{nickname}
+		</if>
+		<if test="region != null">
+			and u.region like CONCAT('%','${region}','%' )
+		</if>
+		<if test="realName != null">
+			<!-- and ui.apply_name like CONCAT('%','${realName}','%' ) -->
+			and ui.apply_name=#{realName}	<!-- modified by liuzhenbo -->
+		</if>
+		<if test="realNameMobile != null">
+			<!-- and (u.mobile = #{realNameMobile} or ui.apply_name like CONCAT('%','${realNameMobile}','%' 
+				)) -->
+			and (u.mobile = #{realNameMobile} or ui.apply_name=#{realNameMobile})
+		</if>
+		<if test="applyNo != null">
+			and pl.apply_no = #{applyNo}
+		</if>
+		<if test="applyType != null">
+			and pl.source = #{applyType}
+		</if>
+		<if test="status != null"><!-- add by wangjiannan 根据页面来确定时间筛选条件 -->
+			<choose>
+				<when test=" status == 15"><!-- 待推送按确认借款时间来筛选 -->
+					<if test="beginDate != null and beginDate != ''">
+							<![CDATA[
+								and date_format(pl.confirm_time,'%Y-%m-%d') >= date_format(#{beginDate},'%Y-%m-%d') 
+							]]>
+					</if>
+					<if test="endDate != null and endDate != ''">
+						 <![CDATA[
+							 and date_format(pl.confirm_time,'%Y-%m-%d') <= date_format(#{endDate},'%Y-%m-%d') 
+						 ]]>
+					</if>
+				</when>
+				<when test=" status == 5"><!-- 暂时，推送成功页面按手动审核时间来筛选 -->
+					<if test="beginDate != null and beginDate != ''">
+							<![CDATA[
+								and date_format(pl.operate_audit_time,'%Y-%m-%d') >= date_format(#{beginDate},'%Y-%m-%d') 
+							]]>
+					</if>
+					<if test="endDate != null and endDate != ''">
+						 <![CDATA[
+							 and date_format(pl.operate_audit_time,'%Y-%m-%d') <= date_format(#{endDate},'%Y-%m-%d') 
+						 ]]>
+					</if>
+				</when>
+				<when test=" status == 9"><!-- 流标页面按流标时间来筛选 -->
+					<if test="beginDate != null and beginDate != ''">
+							<![CDATA[
+								and date_format(pl.fail_time,'%Y-%m-%d') >= date_format(#{beginDate},'%Y-%m-%d') 
+							]]>
+					</if>
+					<if test="endDate != null and endDate != ''">
+						 <![CDATA[
+							 and date_format(pl.fail_time,'%Y-%m-%d') <= date_format(#{endDate},'%Y-%m-%d') 
+						 ]]>
+					</if>
+				</when>
+				<when test=" status == 11"><!-- 还款中按放款时间来筛选 -->
+					<if test="beginDate != null and beginDate != ''">
+							<![CDATA[
+								and date_format(pl.open_time,'%Y-%m-%d') >= date_format(#{beginDate},'%Y-%m-%d') 
+							]]>
+					</if>
+					<if test="endDate != null and endDate != ''">
+						 <![CDATA[
+							 and date_format(pl.open_time,'%Y-%m-%d') <= date_format(#{endDate},'%Y-%m-%d') 
+						 ]]>
+					</if>
+					<if test="beginDate1 != null and beginDate1 != ''">
+							<![CDATA[
+								and date_format(pl.confirm_time,'%Y-%m-%d') >= date_format(#{beginDate1},'%Y-%m-%d') 
+							]]>
+					</if>
+					<if test="endDate1 != null and endDate1 != ''">
+						 <![CDATA[
+							 and date_format(pl.confirm_time,'%Y-%m-%d') <= date_format(#{endDate1},'%Y-%m-%d') 
+						 ]]>
+					</if>
+				</when>
+				<when test=" status == 12"><!-- 还款完成按创建时间来筛选 -->
+					<if test="beginDate != null and beginDate != ''">
+							<![CDATA[
+								and date_format(pl.create_time,'%Y-%m-%d') >= date_format(#{beginDate},'%Y-%m-%d') 
+							]]>
+					</if>
+					<if test="endDate != null and endDate != ''">
+						 <![CDATA[
+							 and date_format(pl.create_time,'%Y-%m-%d') <= date_format(#{endDate},'%Y-%m-%d') 
+						 ]]>
+					</if>
+				</when>
+				<otherwise>
+					<if test="beginDate != null and beginDate != ''">
+							<![CDATA[
+								and date_format(pl.confirm_time,'%Y-%m-%d') >= date_format(#{beginDate},'%Y-%m-%d') 
+							]]>
+					</if>
+					<if test="endDate != null and endDate != ''">
+						 <![CDATA[
+							 and date_format(pl.confirm_time,'%Y-%m-%d') <= date_format(#{endDate},'%Y-%m-%d') 
+						 ]]>
+					</if>
+				</otherwise>
+			</choose>
+		</if>
+		<if test="isBorrowOverDue ==1">
+			and pl.is_over_due = 1
+		</if>
+		<if test="orderBy != null"><!-- add by wangjiannan 2015.2.29 -->
+		<![CDATA[
+				order by ${orderBy} desc
+		]]>
+		</if>
+		<!-- <![CDATA[ order by pl.operate_audit_time desc ]]> -->
+		<if test="from != null and rows != null">
+			limit #{from},#{rows}
+		</if>
+	</select>
+	
+	<!-- 添加状态改变记录 -->
+	<insert id="addStatusRecord" parameterType="com.ishidai.ischedule.business.domain.LoanStatusRecord">
+		insert into p_status_record (
+			loan_id,status,content,operate_time,operate_staff_id
+			)values(
+			#{loanId},#{status},#{content},#{operateTime},#{operateStaffId}
+			)
+	</insert>
+	
+	<!-- 修改标的已放弃或者标的已确认 -->
+	<update id="updateLoanConfig" parameterType="com.ishidai.ischedule.business.domain.Loan">
+		update p_loan
+		<set>
+			status = #{status},
+			<!-- 修改用户是否确认标的时间 -->
+		    confirm_time = #{confirmTime},
+			version=version+1,
+			update_time=now()
+		</set>
+		where version=#{version} and id=#{id}
+	</update>
+</mapper>
+	
+	

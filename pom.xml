@@ -1,24 +1,21 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	
+
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>com.kangye</groupId>
-	<artifactId>linshow</artifactId>
-	<version>${set.version}</version>
+	<groupId>com.ishidai</groupId>
+	<artifactId>ischedule</artifactId>
+	<version>${ck.version}</version>
 	<packaging>pom</packaging>
-	<name>linshow</name>
-	
-	<description>linshow</description>
-	
+	<name>ischedule</name>
+
 	<modules>
-		<module>lin-core</module>
-		<module>lin-dashbroad</module>
-		<module>lin-ui</module>
-		<module>lin-jobs</module>
-		<module>lin-cache</module>
+		<module>is-core</module>
+		<module>is-dashboard</module>
+		<module>is-business</module>
+		<module>is-rest-api</module>
 	</modules>
-    
-    <build>
+
+	<build>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -35,10 +32,10 @@
 
 	<!-- 资源库 -->
 	<repositories>
-        <repository>
-            <id>thirdparty</id>
-            <url>http://inside.puhuifinance.com/nexus/content/repositories/thirdparty</url>
-        </repository>
+		<repository>
+			<id>thirdparty</id>
+			<url>http://inside.puhuifinance.com/nexus/content/repositories/thirdparty</url>
+		</repository>
 		<repository>
 			<id>puhuifinance</id>
 			<name>Maven of Puhuifinance.com</name>
@@ -64,7 +61,7 @@
 			<layout>default</layout>
 		</repository>
 	</repositories>
-	
+
 	<!-- pom常量定义 -->
 	<properties>
 		<!-- Main Lib Version -->
@@ -74,10 +71,11 @@
 		<fastjson.version>1.1.34</fastjson.version>
 		<slf4j.version>1.7.5</slf4j.version>
 		<logback.version>1.0.13</logback.version>
-        <jedis.version>2.4.2</jedis.version>
+		<jedis.version>2.4.2</jedis.version>
 		<druid.version>1.0.4</druid.version>
 		<junit.version>4.11</junit.version>
 		<commons-lang3.version>3.1</commons-lang3.version>
+		<commons-collections.version>3.2.1</commons-collections.version>
 		<commons-io.version>2.4</commons-io.version>
 		<commons-beanutils.version>1.8.3</commons-beanutils.version>
 		<commons-fileupload.version>1.3</commons-fileupload.version>
@@ -86,8 +84,8 @@
 		<mail.version>1.5.0-b01</mail.version>
 		<joda-time.version>2.3</joda-time.version>
 		<poi.version>3.9</poi.version>
-        <poi-ooxml.version>3.9</poi-ooxml.version>
-        <xmlbeans.version>2.4.0</xmlbeans.version>
+		<poi-ooxml.version>3.9</poi-ooxml.version>
+		<xmlbeans.version>2.4.0</xmlbeans.version>
 		<jsoup.version>1.7.2</jsoup.version>
 		<shiro-core.version>1.2.2</shiro-core.version>
 		<shiro-spring.version>1.2.2</shiro-spring.version>
@@ -113,51 +111,70 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<jdk.version>1.7</jdk.version>
 		<maven.test.skip>true</maven.test.skip>
-		<!-- Version -->
-		<set.version>1.0</set.version>
+		<!-- Version 
+		<ck.version>1.0-SNAPSHOT</ck.version>
+		-->
 		<!-- 确认是否需要 -->
-		<!-- <hibernate-validator.version>4.3.1.Final</hibernate-validator.version> -->
-        <package.target>resources</package.target>
-        <!-- 阿里巴巴 dubbo版本 -->
-        <alibaba.dubbo.version>2.4.9</alibaba.dubbo.version>
-        <!-- 队列jar包 -->
-        <kafka.version>0.8.2.1</kafka.version>
-        <!-- 银联证书引用jar包 -->
-        <bcprov-version>1.45</bcprov-version>
-        <!-- 银联基础jar包 -->
-        <upacp-version>1.0.0</upacp-version>
-        <!-- activemq -->
-        <activemq.version>5.7.0</activemq.version>
-     
+		<hibernate-validator.version>4.3.1.Final</hibernate-validator.version>
+		<package.target>resources</package.target>
+		<!-- 阿里巴巴 dubbo版本 -->
+		<alibaba.dubbo.version>2.4.9</alibaba.dubbo.version>
+		<!-- 队列jar包 -->
+		<kafka.version>0.8.2.1</kafka.version>
+		<!-- 银联证书引用jar包 -->
+		<bcprov-version>1.45</bcprov-version>
+		<!-- 银联基础jar包 -->
+		<upacp-version>1.0.0</upacp-version>
+		<!-- activemq -->
+		<activemq.version>5.7.0</activemq.version>
+
 	</properties>
-	
+
 	<!-- 单元测试 -->
 	<dependencies>
+
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>${junit.version}</version>
 			<scope>test</scope>
 		</dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-test</artifactId>
-            <version>${spring.version}</version>
-            <scope>test</scope>
-        </dependency>
-
 		<dependency>
-			<groupId>org.apache.httpcomponents</groupId>
-			<artifactId>httpclient</artifactId>
-			<version>${httpclient.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.httpcomponents</groupId>
-			<artifactId>httpcore</artifactId>
-			<version>${httpcore.version}</version>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-test</artifactId>
+			<version>${spring.version}</version>
+			<scope>test</scope>
 		</dependency>
 
 	</dependencies>
-	
-	
+
+	<profiles>
+		<profile>
+			<id>test</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<properties>
+				<ck.version>1.0-SNAPSHOT</ck.version>
+			</properties>
+		</profile>
+		<profile>
+			<id>prd</id>
+			<properties>
+				<ck.version>1.0</ck.version>
+			</properties>
+		</profile>
+	</profiles>
+
+	<distributionManagement>
+		<repository>
+			<id>releases</id>
+			<url>http://inside.puhuifinance.com/nexus/content/repositories/releases</url>
+		</repository>
+		<snapshotRepository>
+			<id>snapshots</id>
+			<url>http://inside.puhuifinance.com/nexus/content/repositories/snapshots</url>
+		</snapshotRepository>
+	</distributionManagement>
+
 </project>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ishidai.ischedule.business.dao.SystemRegionDao" >
+
+  <resultMap id="BaseResultMap" type="com.ishidai.ischedule.business.domain.SystemRegion" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="code" property="code" jdbcType="VARCHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="layer" property="layer" jdbcType="INTEGER" />
+    <result column="parent_code" property="parentCode" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="base_culums">
+  		id, 
+    	code, 
+    	name, 
+      	layer, 
+      	parent_code, 
+      	create_time, 
+      	update_time
+  </sql>
+  
+  <select id="selectByCode" resultMap="BaseResultMap" parameterType="String" >
+    select 
+    	<include refid="base_culums"></include>
+    from system_region
+    where code = #{code,jdbcType=VARCHAR}
+  </select>
+  
+  <select id="selectByParCodeOveName" resultMap="BaseResultMap" >
+    select 
+    	<include refid="base_culums"></include>
+    from system_region
+    where 1=1
+    	and parent_code = #{parentCode,jdbcType=VARCHAR}
+    	and name = #{name,jdbcType=VARCHAR}
+  </select>
+  
+</mapper>

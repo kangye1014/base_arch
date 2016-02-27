@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:jms="http://www.springframework.org/schema/jms"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+       http://www.springframework.org/schema/jms 
+       http://www.springframework.org/schema/jms/spring-jms-3.2.xsd">
+       
+	<!--1: ActiveMQ 连接工厂 -->
+	<bean id="targetConnectionFactory" class="org.apache.activemq.ActiveMQConnectionFactory">
+		<property name="brokerURL" value="${jms.broker_url}" />
+		<!-- 对PERSISTENT的消息进行异步发送(NON_PERSISTENT消息默认异步发送) -->
+		<property name="useAsyncSend" value="true" />
+	</bean>
+	<!--2: Spring Caching 连接工厂 -->
+	<bean id="connectionFactory" class="org.springframework.jms.connection.CachingConnectionFactory">
+		<property name="targetConnectionFactory" ref="targetConnectionFactory" />
+		<property name="sessionCacheSize" value="10" />
+	</bean>
+	<!--3: 配置JMS模版 -->
+	<bean id="jmsTemplate" class="org.springframework.jms.core.JmsTemplate">
+		<property name="connectionFactory" ref="connectionFactory" />
+		<property name="defaultDestination" ref="destination" />
+	</bean>
+	
+	<!--4: 接收Queue定义 -->
+	<!-- 接收结算MQ通知 -->
+	<bean id="coreLendRequestStatusChangeQueue" class="org.apache.activemq.command.ActiveMQQueue">
+		<constructor-arg value="settlement_jiea_draw_queue2" />
+	</bean>
+	<!-- 接收短信MQ通知 -->
+	<bean id="messageCoreLendRequestStatusChangeQueue" class="org.apache.activemq.command.ActiveMQQueue">
+		<constructor-arg value="notify_ishidai_sm_status_queue" />
+	</bean>
+	<!-- 接收核心状态MQ通知 -->
+	<bean id="requestStatusChangeQueue" class="org.apache.activemq.command.ActiveMQQueue">
+		<constructor-arg value="core_lend_request_status_queue_4ja" />
+	</bean>
+	<!-- 发送Queue定义 -->
+	<bean id="destination" class="org.apache.activemq.command.ActiveMQQueue">
+		<constructor-arg index="0" value="core_lend_request_status_queue_4ja" />
+	</bean>
+	
+	<!--5: MQ通知映射 -->
+	<jms:listener-container connection-factory="connectionFactory" concurrency="5-10">
+		<!-- 接收结算MQ通知映射 -->
+		<jms:listener destination="settlement_jiea_draw_queue_test——" ref="paymentNoticeListener"/>
+		<!-- 接收短信MQ映射 -->
+		<jms:listener destination="notify_ishidai_sm_status_queue" ref="messageNoticeListener"/>
+		<!-- 接收核心状态MQ映射 -->
+		<jms:listener destination="core_lend_request_status_queue_4ja" ref="requestStatusChangeListener"/>
+	</jms:listener-container>
+	
+	<!--6: 消息处理类 -->
+	<!-- 接收结算MQ通知消息处理类 -->
+	<bean id="paymentNoticeListener" class="com.ishidai.iloan.listener.PaymentNoticeListener" />
+	<!-- 接收短信MQ消息处理类 -->
+	<bean id="messageNoticeListener" class="com.ishidai.iloan.listener.MessageNoticeListener" />
+	<!-- 接收核心状态MQ消息处理类 -->
+	<bean id="requestStatusChangeListener" class="com.ishidai.iloan.listener.RequestStatusChangeListener" />
+</beans>

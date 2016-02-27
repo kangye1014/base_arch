@@ -1,0 +1,82 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>com.ishidai</groupId>
+		<artifactId>ischedule</artifactId>
+		<version>${ck.version}</version>
+	</parent>
+	<artifactId>is-business</artifactId>
+	<name>isbusiness</name>
+	<description>业务模块</description>
+	
+	<dependencies>
+		<dependency>
+			<groupId>com.ishidai</groupId>
+			<artifactId>is-core</artifactId>
+			<version>${ck.version}</version>
+			 <exclusions>
+            	<exclusion>
+            		<artifactId>slf4j-log4j12</artifactId>
+            		<groupId>org.slf4j</groupId>
+            	</exclusion>
+            </exclusions>
+		</dependency>
+		
+		<!-- Log start 必须加这个，不然log兼容错误-->
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>${slf4j.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>log4j-over-slf4j</artifactId>
+			<version>${slf4j.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>jcl-over-slf4j</artifactId>
+			<version>${slf4j.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>jul-to-slf4j</artifactId>
+			<version>${slf4j.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-classic</artifactId>
+			<version>${logback.version}</version>
+		</dependency>
+		<!-- Log end -->
+		
+		<!-- puhui dubbo -->
+		<dependency>
+			<groupId>com.puhui</groupId>
+			<artifactId>puhui-credit-server-api</artifactId>
+			<version>1.0</version>
+		</dependency>
+		<dependency>
+			<groupId>com.puhui</groupId>
+			<artifactId>puhui-notification-api</artifactId>
+			<version>1.0</version>
+		</dependency>
+		<dependency>
+			<groupId>com.puhui</groupId>
+			<artifactId>puhui-core-api</artifactId>
+			<version>1.0</version>
+		</dependency>
+		<dependency>
+			<groupId>com.puhui</groupId>
+			<artifactId>puhui-settlement-api</artifactId>
+			<version>1.0</version>
+		</dependency>
+		<dependency>
+			<groupId>com.ishidai</groupId>
+			<artifactId>Idubbo-api</artifactId>
+			<version>1.0</version>
+		</dependency>
+	</dependencies>
+</project>

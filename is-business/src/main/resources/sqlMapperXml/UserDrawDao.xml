@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ishidai.ischedule.business.dao.UserDrawDao" >
+
+  <resultMap id="BaseResultMap" type="com.ishidai.ischedule.business.domain.UserDraw" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="user_id" property="userId" jdbcType="BIGINT" />
+    <result column="core_customer_id" property="coreCustomerId" jdbcType="BIGINT" />
+    <result column="loan_id" property="loanId" jdbcType="BIGINT" />
+    <result column="core_request_id" property="coreRequestId" jdbcType="BIGINT" />
+    <result column="order_num" property="orderNum" jdbcType="VARCHAR" />
+    <result column="money" property="money" jdbcType="DOUBLE" />
+    <result column="actual_money" property="actualMoney" jdbcType="DOUBLE" />
+    <result column="id_no" property="idNo" jdbcType="VARCHAR" />
+    <result column="real_name" property="realName" jdbcType="VARCHAR" />
+    <result column="mobile" property="mobile" jdbcType="VARCHAR" />
+    <result column="bank_no" property="bankNo" jdbcType="VARCHAR" />
+    <result column="bank_name" property="bankName" jdbcType="VARCHAR" />
+    <result column="bank_code" property="bankCode" jdbcType="VARCHAR" />
+    <result column="bank_province" property="bankProvince" jdbcType="VARCHAR" />
+    <result column="bank_city" property="bankCity" jdbcType="VARCHAR" />
+    <result column="bank_sub_name" property="bankSubName" jdbcType="VARCHAR" />
+    <result column="subscribe_time" property="subscribeTime" jdbcType="TIMESTAMP" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="version" property="version" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="lend_Repay_RecordId" property="lendRepayRecordId" jdbcType="BIGINT" />
+  </resultMap>
+  <sql id="BASE_PARAMS_LIST">
+  		id, 
+  		user_id, 
+  		core_customer_id,
+  		loan_id, 
+  		core_request_id,
+      	order_num, 
+      	money, 
+      	actual_money,
+      	id_no, 
+      	real_name, 
+      	mobile, 
+      	bank_no, 
+      	bank_name, 
+      	bank_code, 
+      	bank_province, 
+      	bank_city, 
+      	bank_sub_name, 
+      	subscribe_time, 
+      	status, 
+      	remark, 
+      	version, 
+      	create_time, 
+      	update_time,
+      	lend_Repay_RecordId
+  </sql>
+  
+  <!-- 插入列表 -->
+  <insert id="insertList" parameterType="com.ishidai.ischedule.business.domain.UserDraw" >
+    insert into user_draw (
+  		user_id, 
+  		core_customer_id,
+  		loan_id, 
+  		core_request_id,
+      	order_num, 
+      	money, 
+      	id_no, 
+      	real_name, 
+      	mobile, 
+      	bank_no, 
+      	bank_name, 
+      	bank_code, 
+      	bank_province, 
+      	bank_city, 
+      	bank_sub_name, 
+      	subscribe_time, 
+      	status, 
+      	remark, 
+      	version, 
+      	create_time, 
+      	update_time,
+      	lend_Repay_RecordId
+      )
+    values 
+    <foreach collection="list" item="item" index="index" separator=",">
+    (
+      #{item.userId,jdbcType=BIGINT}, 
+      #{item.coreCustomerId,jdbcType=BIGINT}, 
+      #{item.loanId,jdbcType=BIGINT}, 
+      #{item.coreRequestId,jdbcType=BIGINT}, 
+      #{item.orderNum,jdbcType=VARCHAR}, 
+      #{item.money,jdbcType=DOUBLE}, 
+      #{item.idNo,jdbcType=VARCHAR}, 
+      #{item.realName,jdbcType=VARCHAR}, 
+      #{item.mobile,jdbcType=VARCHAR}, 
+      #{item.bankNo,jdbcType=VARCHAR}, 
+      #{item.bankName,jdbcType=VARCHAR}, 
+      #{item.bankCode,jdbcType=VARCHAR}, 
+      #{item.bankProvince,jdbcType=VARCHAR}, 
+      #{item.bankCity,jdbcType=VARCHAR}, 
+      #{item.bankSubName,jdbcType=VARCHAR}, 
+      #{item.subscribeTime,jdbcType=TIMESTAMP}, 
+      #{item.status,jdbcType=INTEGER}, 
+      #{item.remark,jdbcType=VARCHAR}, 
+      1, 
+       <choose>
+      <when test="item.createTime !=null ">
+       #{item.createTime,jdbcType=TIMESTAMP}, 
+      </when>
+      <otherwise>now(), </otherwise>
+      </choose>
+      now(),
+      #{item.lendRepayRecordId,jdbcType=BIGINT}
+     )
+      </foreach>
+  </insert>
+  
+  <update id="updateByPrimaryKey" parameterType="com.ishidai.ischedule.business.domain.UserDraw" >
+    update user_draw
+    set 
+      user_id = #{userId,jdbcType=BIGINT},
+      loan_id = #{loanId,jdbcType=BIGINT},
+      order_num = #{orderNum,jdbcType=VARCHAR},
+      money = #{money,jdbcType=DOUBLE},
+      actual_money = #{actualMoney,jdbcType=DOUBLE},
+      id_no = #{idNo,jdbcType=VARCHAR},
+      real_name = #{realName,jdbcType=VARCHAR},
+      mobile = #{mobile,jdbcType=VARCHAR},
+      bank_no = #{bankNo,jdbcType=VARCHAR},
+      bank_name = #{bankName,jdbcType=VARCHAR},
+      bank_code = #{bankCode,jdbcType=VARCHAR},
+      bank_province = #{bankProvince,jdbcType=VARCHAR},
+      bank_city = #{bankCity,jdbcType=VARCHAR},
+      bank_sub_name = #{bankSubName,jdbcType=VARCHAR},
+      subscribe_time = #{subscribeTime,jdbcType=TIMESTAMP},
+      status = #{status,jdbcType=INTEGER},
+      remark = #{remark,jdbcType=VARCHAR},
+      version = version + 1,
+      update_time = now()
+    where 
+    	id = #{id,jdbcType=BIGINT}
+    	and version = #{version,jdbcType=INTEGER}
+  </update>
+
+   <update id="updateByOrderNum" parameterType="com.ishidai.ischedule.business.domain.UserDraw" >
+    update user_draw
+    <set>
+    <if test="status != null">
+      status = #{status,jdbcType=INTEGER},
+    </if>
+    <if test="remark != null">
+      remark = #{remark,jdbcType=VARCHAR},
+    </if>
+      version = version + 1,
+      update_time = now()
+    </set>
+    where 
+    	 order_num = #{orderNum,jdbcType=VARCHAR}
+  </update>
+  
+ <update id="updateByDrawId" parameterType="com.ishidai.ischedule.business.domain.UserDraw" >
+    update user_draw
+    <set>
+    <if test="status != null">
+      status = #{status,jdbcType=INTEGER},
+    </if>
+    <if test="remark != null">
+      remark = #{remark,jdbcType=VARCHAR},
+    </if>
+     <if test="orderNum != null">
+      order_num = #{orderNum,jdbcType=VARCHAR},
+    </if>
+      version = version + 1,
+      update_time = now()
+    </set>
+    where 
+    	id = #{id,jdbcType=BIGINT}
+  </update>
+  
+  <!-- 获取列表 -->
+  <select id="selectListByParams" resultMap="BaseResultMap" parameterType="com.ishidai.ischedule.business.domain.UserDraw" >
+    select 
+    	<include refid="BASE_PARAMS_LIST"></include>
+    from user_draw
+    where 
+    	1 = 1
+    	<if test="subscribeTime != null">
+    	and  DATE_FORMAT(subscribe_time, "%Y-%m-%d") = DATE_FORMAT(#{subscribeTime}, "%Y-%m-%d") 
+    	</if>
+    	<if test="status != null">
+    	and  status = #{status}
+    	</if>
+    	<if test="drawStatus !=null">
+    	 and status in 
+	      <foreach item="item" index="index" collection="drawStatus" open="(" separator="," close=")">  
+  			  #{item} 
+  		  </foreach>
+    	</if>
+    	<if test="orderNum != null and orderNum != ''">
+    	 and  order_num = #{orderNum}
+    	</if>
+  </select>
+  
+    <!-- 根据还款列表id获得划扣记录信息 -->
+  <select id="selectListBylendRepayRecordId" resultMap="BaseResultMap" parameterType="com.ishidai.ischedule.business.domain.UserDraw" >
+    select 
+    	<include refid="BASE_PARAMS_LIST"></include>
+    from user_draw
+    where  status !=9 and lend_Repay_RecordId= #{lendRepayRecordId}
+  </select>
+  
+   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from user_draw
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  
+</mapper>

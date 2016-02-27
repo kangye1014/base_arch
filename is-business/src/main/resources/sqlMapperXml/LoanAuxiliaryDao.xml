@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ishidai.ischedule.business.dao.LoanAuxiliaryDao">
+
+  <!-- 标的、标的附属、用户表      ****  返回值映射   -->
+  <resultMap id="loanAuxiliaryResult" type="com.ishidai.ischedule.business.domain.LoanAuxiliary" >
+  	<id column="loan_id" property="loanId" />
+  	<id column="user_id" property="userId" />
+  	<id column="card_id" property="cardId" />                                                                    
+  	<association property="loan" column="loan_id" javaType="com.ishidai.ischedule.business.domain.Loan" resultMap="BaseResultMap"/>
+	<association property="user" column="user_id" javaType="com.ishidai.ischedule.business.domain.User" resultMap="BaseResultMap2"/>
+	<association property="userBankCard" column="card_id" javaType="com.ishidai.ischedule.business.domain.UserBankCard" resultMap="BaseResultMap3"/>
+  </resultMap>
+     <sql id="base_loan_info_user_bank">
+  			pl.id as loan_id,
+  			pl.core_request_id,
+			u.id as user_id,
+			u.core_customer_id,
+			u.real_name,
+			u.id_no,
+			u.mobile,
+			ub.id as card_id,
+			ub.bank_id,
+			ub.bank_card,
+			ub.bank_name,
+			ub.bank_id,
+			ub.bank_sub_name,
+			ub.bank_province,
+			ub.bank_city
+  </sql>
+  <!-- 获取标的用户、银行卡列表  -->
+  <select id="getLoanUserBankInfo" parameterType="com.puhui.core.vo.UnRepayLendVo"  resultMap="loanAuxiliaryResult" >
+		select 
+			<include refid="base_loan_info_user_bank"></include>
+		from 
+			p_loan pl 
+			left join user u on pl.user_id = u.id
+			left join user_bank_card ub on pl.deduct_bank_card_id = ub.id and ub.user_id=pl.user_id
+		where 1 = 1
+		    and ub.is_check = 1
+			and pl.core_request_id in 
+			<foreach item="item" collection="list" separator="," open="(" close=")" index="">  
+		      #{item.coreLendRequestId, jdbcType=BIGINT}  
+		    </foreach> 
+	</select>
+	
+	 <resultMap id="BaseResultMap" type="com.ishidai.ischedule.business.domain.Loan" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="core_request_id" property="coreRequestId" jdbcType="BIGINT" />
+    <result column="loan_no" property="loanNo" jdbcType="VARCHAR" />
+    <result column="apply_no" property="applyNo" jdbcType="VARCHAR" />
+    <result column="contract_id" property="contractId" jdbcType="BIGINT" />
+    <result column="issue" property="issue" jdbcType="VARCHAR" />
+    <result column="title" property="title" jdbcType="VARCHAR" />
+    <result column="type" property="type" jdbcType="INTEGER" />
+    <result column="user_id" property="userId" jdbcType="BIGINT" />
+    <result column="core_customer_id" property="coreCustomerId" jdbcType="BIGINT" />
+    <result column="shares" property="shares" jdbcType="INTEGER" />
+    <result column="amount" property="amount" jdbcType="DOUBLE" />
+    <result column="real_amount" property="realAmount" jdbcType="DOUBLE" />
+    <result column="open_amount" property="openAmount" jdbcType="DOUBLE" />
+    <result column="raise_amount" property="raiseAmount" jdbcType="DOUBLE" />
+    <result column="raise_limit" property="raiseLimit" jdbcType="INTEGER" />
+    <result column="period" property="period" jdbcType="INTEGER" />
+    <result column="rate" property="rate" jdbcType="DOUBLE" />
+    <result column="repay_type" property="repayType" jdbcType="INTEGER" />
+    <result column="loan_desc" property="loanDesc" jdbcType="VARCHAR" />
+    <result column="loan_pic" property="loanPic" jdbcType="VARCHAR" />
+    <result column="service_fee_rate" property="serviceFeeRate" jdbcType="DOUBLE" />
+    <result column="overdul_insterest_rate" property="overdulInsterestRate" jdbcType="DOUBLE" />
+    <result column="bad_debt_insterest_rate" property="badDebtInsterestRate" jdbcType="DOUBLE" />
+    <result column="prepayment_insterest" property="prepaymentInsterest" jdbcType="DOUBLE" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="is_over_due" property="isOverDue" jdbcType="INTEGER" />
+    <result column="is_bad_debt" property="isBadDebt" jdbcType="INTEGER" />
+    <result column="is_risk_audit" property="isRiskAudit" jdbcType="INTEGER" />
+    <result column="risk_audit_time" property="riskAuditTime" jdbcType="TIMESTAMP" />
+    <result column="risk_score" property="riskScore" jdbcType="VARCHAR" />
+    <result column="risk_money" property="riskMoney" jdbcType="DOUBLE" />
+    <result column="is_operate_audit" property="isOperateAudit" jdbcType="INTEGER" />
+    <result column="operate_audit_staff" property="operateAuditStaff" jdbcType="BIGINT" />
+    <result column="operate_audit_time" property="operateAuditTime" jdbcType="TIMESTAMP" />
+    <result column="operate_audit_opinion" property="operateAuditOpinion" jdbcType="VARCHAR" />
+    <result column="confirm_time" property="confirmTime" jdbcType="TIMESTAMP" />
+    <result column="over_due_time" property="overDueTime" jdbcType="TIMESTAMP" />
+    <result column="bad_deb_time" property="badDebTime" jdbcType="TIMESTAMP" />
+    <result column="pass_time" property="passTime" jdbcType="TIMESTAMP" />
+    <result column="full_time" property="fullTime" jdbcType="TIMESTAMP" />
+    <result column="open_time" property="openTime" jdbcType="TIMESTAMP" />
+    <result column="first_repay_time" property="firstRepayTime" jdbcType="TIMESTAMP" />
+    <result column="push_time" property="pushTime" jdbcType="TIMESTAMP" />
+    <result column="fail_time" property="failTime" jdbcType="TIMESTAMP" />
+    <result column="end_time" property="endTime" jdbcType="TIMESTAMP" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="receive_order_id" property="receiveOrderId" jdbcType="BIGINT" />
+    <result column="receive_order_name" property="receiveOrderName" jdbcType="VARCHAR" />
+    <result column="operate_staff_id" property="operateStaffId" jdbcType="BIGINT" />
+    <result column="version" property="version" jdbcType="INTEGER" />
+    <result column="temp_status" property="tempStatus" jdbcType="INTEGER" />
+    <result column="source" property="source" jdbcType="INTEGER" />
+    <result column="client_type" property="clientType" jdbcType="INTEGER" />
+    <result column="is_new_credit_data" property="isNewCreditData" jdbcType="INTEGER" />
+    <result column="region" property="region" jdbcType="VARCHAR" />
+    <result column="product_id" property="productId" jdbcType="BIGINT" />
+  </resultMap>
+  
+    <resultMap id="BaseResultMap2" type="com.ishidai.ischedule.business.domain.User" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="core_customer_id" property="coreCustomerId" jdbcType="BIGINT" />
+    <result column="user_no" property="userNo" jdbcType="VARCHAR" />
+    <result column="kn_userid" property="knUserid" jdbcType="VARCHAR" />
+    <result column="old_kn_userid" property="oldKnUserid" jdbcType="VARCHAR" />
+    <result column="is_new_knid" property="isNewKnid" jdbcType="INTEGER" />        
+    <result column="nickname" property="nickname" jdbcType="VARCHAR" />
+    <result column="password" property="password" jdbcType="VARCHAR" />
+    <result column="cash_password" property="cashPassword" jdbcType="VARCHAR" />
+    <result column="mobile" property="mobile" jdbcType="VARCHAR" />
+    <result column="phone" property="phone" jdbcType="VARCHAR" />
+    <result column="mobile_verified" property="mobileVerified" jdbcType="TINYINT" />
+    <result column="real_name" property="realName" jdbcType="VARCHAR" />
+    <result column="id_no" property="idNo" jdbcType="VARCHAR" />
+    <result column="id_verified" property="idVerified" jdbcType="TINYINT" />
+    <result column="email" property="email" jdbcType="VARCHAR" />
+    <result column="email_verified" property="emailVerified" jdbcType="TINYINT" />
+    <result column="taobao" property="taobao" jdbcType="VARCHAR" />
+    <result column="taobao_verified" property="taobaoVerified" jdbcType="TINYINT" />
+    <result column="qq" property="qq" jdbcType="VARCHAR" />
+    <result column="credit_card_no" property="creditCardNo" jdbcType="VARCHAR" />
+    <result column="bank_card_no" property="bankCardNo" jdbcType="VARCHAR" />
+    <result column="bank_card_id" property="bankCardId" jdbcType="VARCHAR" />
+    <result column="bank_card_name" property="bankCardName" jdbcType="VARCHAR" />
+    <result column="bank_card_sub" property="bankCardSub" jdbcType="VARCHAR" />
+    <result column="credit_score" property="creditScore" jdbcType="DOUBLE" />
+    <result column="head_image" property="headImage" jdbcType="VARCHAR" />
+    <result column="login_permission" property="loginPermission" jdbcType="INTEGER" />
+    <result column="loan_permission" property="loanPermission" jdbcType="INTEGER" />
+    <result column="client_type" property="clientType" jdbcType="TINYINT" />
+    <result column="utm_source" property="utmSource" jdbcType="TINYINT" />
+    <result column="region" property="region" jdbcType="VARCHAR" />
+    <result column="old_user" property="oldUser" jdbcType="INTEGER" />
+    <result column="version" property="version" jdbcType="INTEGER" />
+    <result column="last_login_time" property="lastLoginTime" jdbcType="TIMESTAMP" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="default_deduct" property="defaultDeduct" jdbcType="INTEGER" />
+  </resultMap>
+  
+   <resultMap id="BaseResultMap3" type="com.ishidai.ischedule.business.domain.UserBankCard" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="user_id" property="userId" jdbcType="BIGINT" />
+    <result column="bank_card" property="bankCard" jdbcType="VARCHAR" />
+    <result column="bank_name" property="bankName" jdbcType="VARCHAR" />
+    <result column="bank_id" property="bankId" jdbcType="VARCHAR" />
+    <result column="bank_sub_name" property="bankSubName" jdbcType="VARCHAR" />
+    <result column="bank_province" property="bankProvince" jdbcType="VARCHAR" />
+    <result column="bank_city" property="bankCity" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="version" property="version" jdbcType="INTEGER" />
+    <result column="pay_gate" property="payGate" jdbcType="INTEGER" />
+    <result column="deduct_mark" property="deductMark" jdbcType="INTEGER" />
+    <result column="request_id" property="requestId" jdbcType="VARCHAR" />
+    <result column="is_bind_card" property="isBindCard" jdbcType="INTEGER" />
+    <result column="bind_deduct_time" property="bindDeductTime" jdbcType="TIMESTAMP" />
+    <result column="is_check" property="isCheck" jdbcType="INTEGER" />
+  </resultMap>
+	
+	
+</mapper>

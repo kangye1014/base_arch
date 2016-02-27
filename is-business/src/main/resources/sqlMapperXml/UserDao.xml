@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ishidai.ischedule.business.dao.UserDao">
+
+	<resultMap id="BaseResultMap" type="com.ishidai.ischedule.business.domain.User">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="core_customer_id" property="coreCustomerId"
+			jdbcType="BIGINT" />
+		<result column="user_no" property="userNo" jdbcType="VARCHAR" />
+		<result column="kn_userid" property="knUserid" jdbcType="VARCHAR" />
+		<result column="old_kn_userid" property="oldKnUserid" jdbcType="VARCHAR" />
+		<result column="is_new_knid" property="isNewKnid" jdbcType="INTEGER" />
+		<result column="nickname" property="nickname" jdbcType="VARCHAR" />
+		<result column="password" property="password" jdbcType="VARCHAR" />
+		<result column="cash_password" property="cashPassword"
+			jdbcType="VARCHAR" />
+		<result column="mobile" property="mobile" jdbcType="VARCHAR" />
+		<result column="phone" property="phone" jdbcType="VARCHAR" />
+		<result column="mobile_verified" property="mobileVerified"
+			jdbcType="TINYINT" />
+		<result column="real_name" property="realName" jdbcType="VARCHAR" />
+		<result column="id_no" property="idNo" jdbcType="VARCHAR" />
+		<result column="id_verified" property="idVerified" jdbcType="TINYINT" />
+		<result column="email" property="email" jdbcType="VARCHAR" />
+		<result column="email_verified" property="emailVerified"
+			jdbcType="TINYINT" />
+		<result column="taobao" property="taobao" jdbcType="VARCHAR" />
+		<result column="taobao_verified" property="taobaoVerified"
+			jdbcType="TINYINT" />
+		<result column="qq" property="qq" jdbcType="VARCHAR" />
+		<result column="credit_card_no" property="creditCardNo"
+			jdbcType="VARCHAR" />
+		<result column="bank_card_no" property="bankCardNo" jdbcType="VARCHAR" />
+		<result column="bank_card_id" property="bankCardId" jdbcType="VARCHAR" />
+		<result column="bank_card_name" property="bankCardName"
+			jdbcType="VARCHAR" />
+		<result column="bank_card_sub" property="bankCardSub" jdbcType="VARCHAR" />
+		<result column="credit_score" property="creditScore" jdbcType="DOUBLE" />
+		<result column="head_image" property="headImage" jdbcType="VARCHAR" />
+		<result column="login_permission" property="loginPermission"
+			jdbcType="INTEGER" />
+		<result column="loan_permission" property="loanPermission"
+			jdbcType="INTEGER" />
+		<result column="client_type" property="clientType" jdbcType="TINYINT" />
+		<result column="utm_source" property="utmSource" jdbcType="TINYINT" />
+		<result column="region" property="region" jdbcType="VARCHAR" />
+		<result column="old_user" property="oldUser" jdbcType="INTEGER" />
+		<result column="version" property="version" jdbcType="INTEGER" />
+		<result column="last_login_time" property="lastLoginTime"
+			jdbcType="TIMESTAMP" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+		<result column="default_deduct" property="defaultDeduct"
+			jdbcType="INTEGER" />
+	</resultMap>
+
+	<!-- 根据id查询用户 -->
+	<select id="findUserById" parameterType="Long"
+		resultType="com.ishidai.ischedule.business.domain.User">
+		 <![CDATA[
+		 SELECT
+            id,
+            core_customer_id coreCustomerId,
+            region,
+            kn_userid knUserid,
+            nickname,
+            password,
+            cash_password cashPassword,
+            mobile,
+            mobile_verified mobileVerified,
+            real_name as realName,
+            id_no as idNo,
+            id_verified idVerified,
+            email,
+            reg_email regEmail,
+            email_verified as emailVerified,
+            taobao,
+            qq,
+            credit_card_no creditCardNo,
+            bank_card_no bankCardNo,
+            bank_card_name bankCardName,
+            bank_card_sub bankCardSub,
+            credit_score as creditScore,
+            head_image as headImage,
+            login_permission as loginPermission,
+            loan_permission as loanPermission,
+            client_type clientType,
+            utm_source utmSource,
+            version,
+            last_login_time lastLoginTime,
+            create_time createTime,
+            update_time updateTIme,
+            phone,
+            default_deduct defaultDeduct,
+            core_customer_id as coreCustomerId,
+            gender,
+            third_id as thirdId
+		 FROM
+		    user
+		 WHERE
+		    id=#{id}
+		]]>
+	</select>
+
+</mapper>
